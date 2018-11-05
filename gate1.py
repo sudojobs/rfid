@@ -58,12 +58,12 @@ def add_access_gate1(uid):
                 else:
     		    print("Gate:2  has been Accessed at Date: %s  Time: %s  Gate 1 & 2 Both  Accessed" % (data[4], data[5]))
         else: 
-    	        cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime) values(1,0,date('now'),time('now'))" )
-    	        conn.commit()
-    	        conn.close()
-                p = subprocess.Popen(["scp", "useraccess.db", "pi@192.168.0.29:/home/pi/MFRC522-python/"])
-                sts = os.waitpid(p.pid, 0)
-    	        print "Gate:1 Access Granted"
+    	            cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime) values(1,0,date('now'),time('now'))" )
+    	            conn.commit()
+    	            conn.close()
+                    p = subprocess.Popen(["scp", "useraccess.db", "pi@192.168.0.29:/home/pi/MFRC522-python/"])
+                    sts = os.waitpid(p.pid, 0)
+    	            print "Gate:1 Access Granted"
 
 
 # Hook the SIGINT
