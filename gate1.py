@@ -25,6 +25,7 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 import sqlite3
+import subprocess
 
 continue_reading = True
 
@@ -36,6 +37,7 @@ def end_read(signal,frame):
     continue_reading = False
     GPIO.cleanup()
 
+def sync_db():
 
 
 def add_access_gate1(uid):
@@ -59,6 +61,8 @@ def add_access_gate1(uid):
     	        cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime) values(1,0,date('now'),time('now'))" )
     	        conn.commit()
     	        conn.close()
+                p = subprocess.Popen(["scp", "useraccess.db", "pi@192.168.0.29:/home/pi/MFRC522-python/"])
+                sts = os.waitpid(p.pid, 0)
     	        print "Gate:1 Access Granted"
 
 

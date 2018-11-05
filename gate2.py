@@ -25,6 +25,7 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 import sqlite3
+import subprocess
 
 continue_reading = True
 
@@ -49,25 +50,23 @@ def add_access_gate2(uid):
     #print data
  
     if data is None:
-	#cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime,device) values(1,0,date('now'),time('now'), %s)" % uid1)
-	#conn.commit()
-	#conn.close()
-	print "Gate:2 Access Cant Possible without Gate 1 Access"
-        print "Gate:2 Access Denied"
+   	print "Gate:1 Access Denied"
     else:
-	print "Gate:1 Access Denied"
-        #print data[1]
- 	#print data[2]
-	if  (data[1] == 1):
-		if (data[2] == 0) :
-                    print("Gate:2  Access Granted")
-
+    	if  (data[1] == 1):
+    		if (data[2] == 0) :
+                    cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime) values(1,0,date('now'),time('now'))" )
+    	            conn.commit()
+    	            conn.close()
+                    p = subprocess.Popen(["scp", "useraccess.db", "pi@192.168.0.12:/home/pi/rfid/MFRC522-python/"])
+                    sts = os.waitpid(p.pid, 0)
+    	            print "Gate:2 Access Granted"
                 else:
-		    print("Gate:2  has been Accessed at Date: %s  Time: %s  Gate 1 & 2 Both  Accessed" % (data[3], data[4]))
-        else
-		print " Gate:2 Access Cant Possible without Gate 1 Access"
-                print " Gate:2 Access Denied"
+    		    print("Gate:2  has been Accessed at Date: %s  Time: %s  Gate 1 & 2 Both  Accessed" % (data[4], data[5]))
+        else: 
+             print "Gate:2 Access Denied, because Gate:1 Should be Accessed Before Gate:2"
 
+    	        
+                
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
 
