@@ -46,22 +46,20 @@ def add_access_gate1(uid):
     #print "check  for the uid and gate access  and give error here itself"
     cursor.execute("SELECT  id,gate1,gate2,device,currentdate,currenttime FROM gatepass WHERE device =%s" % uid1 )
     data=cursor.fetchone()
-    #print data
  
     if data is None:
-	cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime,device) values(1,0,date('now'),time('now'), %s)" % uid1)
-	conn.commit()
-	conn.close()
-	print "Gate:1 Access Granted"
+   	print "Gate:1 Access Denied"
     else:
-	print "Gate:1 Access Denied"
-        #print data[1]
- 	#print data[2]
-	if  (data[1] == 1):
-		if (data[2] == 0) :
-                    print("Gate:1  has been Accessed at Date: %s  Time: %s  Gate:2 not Accessed" % (data[3]  , data[4]))
+    	if  (data[1] == 1):
+    		if (data[2] == 0) :
+                    print("Gate:1  has been Accessed at Date: %s  Time: %s  Gate:2 not Accessed" % (data[4]  , data[5]))
                 else:
-		    print("Gate:2  has been Accessed at Date: %s  Time: %s  Gate 1 & 2 Both  Accessed" % (data[3], data[4]))
+    		    print("Gate:2  has been Accessed at Date: %s  Time: %s  Gate 1 & 2 Both  Accessed" % (data[4], data[5]))
+        else: 
+    	        cursor.execute("INSERT INTO gatepass(gate1,gate2,currentdate,currenttime) values(1,0,date('now'),time('now'))" )
+    	        conn.commit()
+    	        conn.close()
+    	        print "Gate:1 Access Granted"
 
 
 # Hook the SIGINT
